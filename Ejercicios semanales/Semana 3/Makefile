@@ -10,7 +10,7 @@ PG_PORT=5432
 PG_PWD=ander123
 
 DOCKER_PATH="./ETL/docker-compose.yml"
-DATABASE_SCRIPT="/ETL/db_tables.sql"
+DATABASE_SCRIPT="./db_tables.sql"
 .PHONY: all up psql
 
 all: up psql
