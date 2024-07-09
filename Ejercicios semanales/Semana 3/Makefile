@@ -9,8 +9,8 @@ PG_PORT=5432
 
 PG_PWD=ander123
 
-DOCKER_PATH=./Semana 3:/docker-compose.yml
-DATABASE_SCRIPT=./Semana 3:/db_tables.sql
+DOCKER_PATH="/ETL/docker-compose.yml"
+DATABASE_SCRIPT="/ETL/db_tables.sql"
 .PHONY: all up psql
 
 all: up psql

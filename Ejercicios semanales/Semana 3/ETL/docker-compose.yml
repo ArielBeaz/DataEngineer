@@ -18,4 +18,4 @@ services:
       retries: 5
 
     volumes:
-      - ./Semana 3:/db_tables.sql
+      - ./Semana 3:/ETL:/db_tables.sql
