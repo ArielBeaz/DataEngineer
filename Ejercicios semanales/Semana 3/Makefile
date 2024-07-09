@@ -9,9 +9,8 @@ PG_PORT=5432
 
 PG_PWD=ander123
 
-DOCKER_PATH=./redshift/docker-compose.yml
-DATABASE_SCRIPT=/sql-etl-process/sql-etl-process.sql
-
+DOCKER_PATH=Ejercicios semanales/Semana 3/docker-compose.yml
+DATABASE_SCRIPT=Ejercicios semanales/Semana 3/db_tables.sql
 .PHONY: all up psql
 
 all: up psql
