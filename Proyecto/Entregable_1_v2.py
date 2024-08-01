@@ -7,13 +7,14 @@ import psycopg2
 from psycopg2.extras import execute_values
 import pandas as pd
 from pandas import json_normalize
+import isodate
 
 load_dotenv()
 
 def get_youtube_data(api_key, max_results=10, region_code='CL'):
     API_URL = 'https://www.googleapis.com/youtube/v3/videos'
     params = {
-        'part': 'snippet,statistics',
+        'part': 'snippet,statistics,contentDetails',
         'chart': 'mostPopular',
         'regionCode': region_code,
         'maxResults': max_results,
@@ -26,11 +27,19 @@ def get_youtube_data(api_key, max_results=10, region_code='CL'):
         print(f"Error fetching data from YouTube API: {response.status_code}")
         return None
 
+def convert_to_minutes(duration):
+    if pd.isna(duration):
+        return None
+    duration_obj = isodate.parse_duration(duration)
+    return duration_obj.total_seconds() / 60
+
 def transform_data(data):
     df = json_normalize(data['items'])
-    new_index = ['titulo', 'canal_id', 'reproducciones', 'cantidad_de_likes', 'cantidad_comentarios', 'lenguaje']
-    dfredshift = df[['snippet.title', 'snippet.channelId', 'statistics.viewCount', 'statistics.likeCount', 'statistics.commentCount', 'snippet.defaultLanguage']]
+    dfredshift = df[['snippet.title','snippet.channelId','statistics.viewCount','statistics.likeCount','statistics.commentCount','contentDetails.duration','snippet.defaultLanguage']]
+    new_index = ['titulo', 'canal_id','reproducciones','cantidad_de_likes','cantidad_comentarios','duración','lenguaje']
     dfredshift.columns = new_index
+    dfredshift['duración_minutos'] = dfredshift['duración'].apply(convert_to_minutes)
+    dfredshift = dfredshift.drop(columns=['duración'])
     time_request = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     dfredshift['time_request'] = str(time_request)
     return dfredshift
@@ -60,6 +69,7 @@ def create_table(conn, table_name):
         cantidad_de_likes INT,
         cantidad_comentarios INT,
         lenguaje VARCHAR(200),
+        duración_minutos FLOAT,
         time_request VARCHAR(200)
     );
     """
@@ -87,7 +97,6 @@ def main():
     db_name = os.getenv('db_name')
     
     data = get_youtube_data(YOUTUBE_API_KEY)
-    print(data)
     dfredshift = transform_data(data)
     
     conn = connect_to_redshift(db_user, db_password, db_host_amazon, db_port, db_name)
