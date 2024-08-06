@@ -63,6 +63,7 @@ def connect_to_redshift(db_user, db_password, db_host, db_port, db_name):
 def create_table(conn, table_name):
     query_create_table = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
+        id INT IDENTITY(1, 1) PRIMARY KEY,
         titulo VARCHAR(500),
         canal_id VARCHAR(200),
         reproducciones INT,
