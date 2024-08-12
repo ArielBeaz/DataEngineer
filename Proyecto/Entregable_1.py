@@ -78,6 +78,15 @@ def create_table(conn, table_name):
     cur.execute(query_create_table)
     cur.close()
 
+def consult_table(conn, table_name):
+    query_consult_table = f"""
+       SELECT *
+       FROM {table_name};
+    """
+    cur = conn.cursor()
+    cur.execute(query_consult_table)
+    cur.close()
+
 def insert_data(conn, table_name, df):
     dtypes = df.dtypes
     cols = list(dtypes.index)
@@ -105,6 +114,7 @@ def main():
         table_name = "ariel_beaz_coderhouse.tendencias_youtube"
         create_table(conn, table_name)
         insert_data(conn, table_name, dfredshift)
+        consult_table(conn,table_name)
         conn.close()
 
 if __name__ == "__main__":
