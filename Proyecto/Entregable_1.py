@@ -85,7 +85,11 @@ def consult_table(conn, table_name):
     """
     cur = conn.cursor()
     cur.execute(query_consult_table)
+    rows = cur.fetchall()
+    columns = [desc[0] for desc in cur.description]
+    df = pd.DataFrame(rows, columns=columns)
     cur.close()
+    return df
 
 def insert_data(conn, table_name, df):
     dtypes = df.dtypes
@@ -114,7 +118,8 @@ def main():
         table_name = "ariel_beaz_coderhouse.tendencias_youtube"
         create_table(conn, table_name)
         insert_data(conn, table_name, dfredshift)
-        consult_table(conn,table_name)
+        df_result = consult_table(conn, table_name)
+        print(df_result)
         conn.close()
 
 if __name__ == "__main__":
