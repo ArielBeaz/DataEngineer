@@ -63,7 +63,7 @@ def connect_to_redshift(db_user, db_password, db_host, db_port, db_name):
 def create_table(conn, table_name):
     query_create_table = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
-        id INT IDENTITY(1, 1) PRIMARY KEY,
+        id VARCHAR(50),
         titulo VARCHAR(500),
         canal_id VARCHAR(200),
         reproducciones INT,
@@ -71,7 +71,8 @@ def create_table(conn, table_name):
         cantidad_comentarios INT,
         lenguaje VARCHAR(200),
         duración_minutos FLOAT,
-        time_request VARCHAR(200)
+        time_request VARCHAR(200),
+        PRIMARY KEY (id, time_request)
     );
     """
     cur = conn.cursor()
@@ -95,7 +96,12 @@ def insert_data(conn, table_name, df):
     dtypes = df.dtypes
     cols = list(dtypes.index)
     values = [tuple(x) for x in df.to_numpy()]
-    insert_sql = f"INSERT INTO {table_name} ({', '.join(cols)}) VALUES %s"
+    insert_sql = f"""
+        INSERT INTO {table_name} ({', '.join(cols)}) 
+        VALUES %s
+        ON CONFLICT (id, time_request) 
+        DO NOTHING;
+    """
     cur = conn.cursor()
     cur.execute("BEGIN")
     execute_values(cur, insert_sql, values)
