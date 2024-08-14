@@ -35,13 +35,19 @@ def convert_to_minutes(duration):
 
 def transform_data(data):
     df = json_normalize(data['items'])
-    dfredshift = df[['snippet.title','snippet.channelId','statistics.viewCount','statistics.likeCount','statistics.commentCount','contentDetails.duration','snippet.defaultLanguage']]
-    new_index = ['titulo', 'canal_id','reproducciones','cantidad_de_likes','cantidad_comentarios','duración','lenguaje']
+    dfredshift = df[['id', 'snippet.title', 'snippet.channelId', 'statistics.viewCount',
+                     'statistics.likeCount', 'statistics.commentCount', 'contentDetails.duration',
+                     'snippet.defaultLanguage']]
+    new_index = ['id', 'titulo', 'canal_id', 'reproducciones', 'cantidad_de_likes', 
+                 'cantidad_comentarios', 'duración', 'lenguaje']
     dfredshift.columns = new_index
+    
+    # Convertir la duración a minutos y agregar time_request
     dfredshift['duración_minutos'] = dfredshift['duración'].apply(convert_to_minutes)
     dfredshift = dfredshift.drop(columns=['duración'])
     time_request = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     dfredshift['time_request'] = str(time_request)
+    
     return dfredshift
 
 def connect_to_redshift(db_user, db_password, db_host, db_port, db_name):
@@ -99,8 +105,6 @@ def insert_data(conn, table_name, df):
     insert_sql = f"""
         INSERT INTO {table_name} ({', '.join(cols)}) 
         VALUES %s
-        ON CONFLICT (id, time_request) 
-        DO NOTHING;
     """
     cur = conn.cursor()
     cur.execute("BEGIN")
