@@ -6,7 +6,7 @@ ENV AIRFLOW_HOME=/opt/airflow
 
 # Instalar las dependencias necesarias
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copiar el DAG a la carpeta de dags
 COPY dags/ /opt/airflow/dags/
