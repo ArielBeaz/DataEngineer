@@ -1,0 +1,27 @@
+[2024-09-13T14:42:41.683+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2024-09-13T14:42:41.714+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: youtube_etl_dag.mail_sender scheduled__2024-09-12T00:00:00+00:00 [queued]>
+[2024-09-13T14:42:41.724+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: youtube_etl_dag.mail_sender scheduled__2024-09-12T00:00:00+00:00 [queued]>
+[2024-09-13T14:42:41.724+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1
+[2024-09-13T14:42:41.766+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): mail_sender> on 2024-09-12 00:00:00+00:00
+[2024-09-13T14:42:41.773+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:61: DeprecationWarning: This process (pid=94) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2024-09-13T14:42:41.775+0000] {standard_task_runner.py:63} INFO - Started process 96 to run task
+[2024-09-13T14:42:41.775+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'youtube_etl_dag', 'mail_sender', 'scheduled__2024-09-12T00:00:00+00:00', '--job-id', '26', '--raw', '--subdir', 'DAGS_FOLDER/youtube_etl_dag.py', '--cfg-path', '/tmp/tmp4sc5so_2']
+[2024-09-13T14:42:41.777+0000] {standard_task_runner.py:91} INFO - Job 26: Subtask mail_sender
+[2024-09-13T14:42:42.489+0000] {task_command.py:426} INFO - Running <TaskInstance: youtube_etl_dag.mail_sender scheduled__2024-09-12T00:00:00+00:00 [running]> on host 5c5aafcec616
+[2024-09-13T14:42:42.643+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='youtube_etl_dag' AIRFLOW_CTX_TASK_ID='mail_sender' AIRFLOW_CTX_EXECUTION_DATE='2024-09-12T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2024-09-12T00:00:00+00:00'
+[2024-09-13T14:42:42.644+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2024-09-13T14:42:42.655+0000] {logging_mixin.py:188} INFO - 
+    subject:    Se han cargado los datos de YouTube
+    from_address:   ariel.beaz@usach.cl
+    password:   ***
+    to_address: ariel.beaz.v@gmail.com
+    
+[2024-09-13T14:42:52.649+0000] {logging_mixin.py:188} INFO - Email sent successfully
+[2024-09-13T14:42:52.651+0000] {python.py:237} INFO - Done. Returned value was: None
+[2024-09-13T14:42:52.652+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2024-09-13T14:42:52.662+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=youtube_etl_dag, task_id=mail_sender, run_id=scheduled__2024-09-12T00:00:00+00:00, execution_date=20240912T000000, start_date=20240913T144241, end_date=20240913T144252
+[2024-09-13T14:42:53.525+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 0
+[2024-09-13T14:42:53.538+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2024-09-13T14:42:53.665+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
